@@ -17,6 +17,8 @@
     </properties>
 
     <dependencies>
+
+<!--        SPRING-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
@@ -33,18 +35,21 @@
             <version>${spring.version}</version>
         </dependency>
 
+<!--        HIBERNATE-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
 
+<!--        JAVAX-->
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>1</version>
         </dependency>
 
+<!--        LOG4J2-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -55,6 +60,8 @@
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+
+
 
         <dependency>
             <groupId>com.h2database</groupId>
