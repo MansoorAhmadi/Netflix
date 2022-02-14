@@ -1,6 +1,7 @@
 import movies.datamodel.Movie;
 
-public class MainApp {
+
+public class NetflixWebApplication {
 
     //Checking dependency connection
     Movie movie = new Movie();

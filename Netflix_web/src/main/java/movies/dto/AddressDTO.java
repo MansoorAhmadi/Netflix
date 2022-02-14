@@ -1,29 +1,17 @@
-package movies.datamodel;
+package movies.dto;
 
-import javax.persistence.*;
+public class AddressDTO {
 
-@Entity
-@Table(name="ADDRESSES")
-public class Address {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="ID")
     private Long id;
 
-    @Column(name="COUNTRY")
     private String country;
 
-    @Column(name="AREA")
     private String area;
 
-    @Column(name="CITY")
     private String city;
 
-    @Column(name="STREET")
     private String street;
 
-    @Column(name="NUMBER")
     private String number;
 
     public Long getId() {
@@ -72,17 +60,5 @@ public class Address {
 
     public void setNumber(String number) {
         this.number = number;
-    }
-
-    @Override
-    public String toString() {
-        return "Address{" +
-                "id=" + id +
-                ", country='" + country + '\'' +
-                ", area='" + area + '\'' +
-                ", city='" + city + '\'' +
-                ", street='" + street + '\'' +
-                ", number='" + number + '\'' +
-                '}';
     }
 }

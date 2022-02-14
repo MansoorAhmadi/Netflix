@@ -13,6 +13,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Netflix_core" options="-parameters" />
       <module name="Netflix_web" options="-parameters" />
     </option>
   </component>

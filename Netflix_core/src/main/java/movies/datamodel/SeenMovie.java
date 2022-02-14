@@ -8,6 +8,7 @@ import java.util.Date;
 public class SeenMovie {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ID")
     private Long id;
 
