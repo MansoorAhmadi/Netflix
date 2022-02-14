@@ -6,45 +6,42 @@ import movies.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
-public class MovieService implements MovieRepository{
+public class MovieService {
 
     @Autowired
     private MovieRepository movieRepository;
 
-    @Override
     public Movie saveMovie(Movie movie) {
+        //saving the movie in the database
         return movieRepository.save(movie);
     }
 
-    @Override
     public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+        List<Movie> movies = new ArrayList<>();
+
+        //lambda expression to add movies - iteration
+        movieRepository.getAllMovies().forEach(movies::add);
+        return movies;
     }
 
-    @Override
-    public Movie getMoviesById(Long id) {
+    public Movie getMovieById(Long id) {
         Optional<Movie> opt = movieRepository.findById(id);
-        if(opt.isPresent()) {
+        if (opt.isPresent()) {
             return opt.get();
         } else {
-            throw new MoviesNotFoundException("Movie with Id : "+id+" Not Found");
+            throw new MoviesNotFoundException("Movie with Id : " + id + " Not Found");
         }
     }
 
-    @Override
+
     public void deleteMovieById(Long id) {
-        movieRepository.delete(getMoviesById(id));
-    }
-
-
-
-    @Override
-    public void updateMovie(Movie movie) {
-        movieRepository.save(movie);
+        movieRepository.delete(getMovieById(id));
     }
 
 }
