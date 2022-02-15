@@ -18,6 +18,8 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:8080")
 public class MovieController {
 
+    //USE DTO CLASSES INSTEAD OF INTERNAL CLASSES
+
     @Autowired
     MovieRepository movieRepository;
 
