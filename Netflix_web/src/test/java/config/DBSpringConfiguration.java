@@ -27,36 +27,31 @@ public class DBSpringConfiguration {
     @Bean("global.conf.mainProperties")
     public Properties getProperties() throws IOException {
         Properties properties = new Properties();
-        properties.load(new FileInputStream(ResourceUtils.getFile("classpath:./config.properties")));
+        properties.load(new FileInputStream(ResourceUtils.getFile("src/test/resources/config.properties")));
+//        "classpath:./config.properties"
         return properties;
     }
 
     @Bean("services.data.mainDS")
-    public DataSource getMainDS(
-            @Autowired
-            @Qualifier("global.conf.mainProperties")
-                    Properties properties
-    ){
+    public DataSource getMainDS(@Autowired @Qualifier("global.conf.mainProperties") Properties properties){
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setDriverClassName(Driver.class.getName());
         driverManagerDataSource.setUrl(resolveProperty(properties,"db.url"));
-        driverManagerDataSource.setPassword("root");
-        driverManagerDataSource.setUsername("root");
+        driverManagerDataSource.setPassword("db.username");
+        driverManagerDataSource.setUsername("db.password");
         return driverManagerDataSource;
 
     }
 
     private String resolveProperty(Properties properties, String propertyKey)  {
-
         return properties.getProperty(propertyKey);
-
     }
 
     @Bean
     public LocalSessionFactoryBean getSessionFactory(@Autowired DataSource ds){
         LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
         factoryBean.setDataSource(ds);
-        factoryBean.setPackagesToScan("fr.epita.quiz.datamodel");
+        factoryBean.setPackagesToScan("movies.datamodel");
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.show_sql", "true");
@@ -68,7 +63,7 @@ public class DBSpringConfiguration {
     public TransactionManager getTransactionManager(@Autowired SessionFactory sessionFactory){
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory);
-        return transactionManager;
+        return (TransactionManager) transactionManager;
     }
 
 }

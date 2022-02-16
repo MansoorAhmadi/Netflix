@@ -1,14 +1,15 @@
-package movies.services;
+package movies.services.impl;
 
 import movies.datamodel.Address;
 import movies.repositories.AddressRepository;
+import movies.services.api.IAddressDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class AddressService {
+public class AddressJPADAO extends GenericJPADAO<Address> implements IAddressDAO{
 
     @Autowired
     private AddressRepository addressRepository;
@@ -29,11 +30,9 @@ public class AddressService {
                 address.getArea(),address.getCity(),address.getStreet(),address.getNumber());
     }
 
-
-
-//    public void deleteAddressById(Long id) {
-//        addressRepository.delete(getAllAddresses(id));
-//    }
+    public void deleteAddressById(Long id) {
+        addressRepository.deleteById(id);
+    }
 
 
 
