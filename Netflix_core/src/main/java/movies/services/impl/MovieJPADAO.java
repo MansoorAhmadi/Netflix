@@ -10,26 +10,60 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 @Repository
 public class MovieJPADAO extends GenericJPADAO<Movie> implements IMovieDOA {
 
-    @Inject
-    @Name("factory")
-    SessionFactory factory;
 
     @Autowired
     private MovieRepository movieRepository;
 
-    public List<Movie> search(Movie movie){
+
+    public List<Movie> readAllLines() {
+
+        String line = "";
+        String[] parts = {};
+        List<Movie> movies = new ArrayList<>();
+
+        Movie movie = new Movie();
+        File file = new File("Netflix_core/src/main/resources/moviesForPostgres.csv");
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        scanner.nextLine();
+        while (scanner.hasNext()) {
+            line = scanner.nextLine();
+            parts = line.split(",");
+
+            //class attributes: id - title - date
+//          *******************************************
+            movie.setTitle(parts[0]);
+            movie.setDate(parts[1]);
+            movies.add(movie);
+
+//            *******************************************
+            System.out.println(line);
+        }
+        return movies;
+    }
+
+        public List<Movie> search(Movie movie){
         Session session = factory.openSession();
-        Query<Movie> query = session.createQuery("from Movies where title =?", Movie.class);
+        Query<Movie> query = session.createQuery("from title from MOVIE where title =?", Movie.class);
 
         query.setParameter("movieTitle", movie.getTitle());
         List<Movie> resultList = query.list();
@@ -65,7 +99,6 @@ public class MovieJPADAO extends GenericJPADAO<Movie> implements IMovieDOA {
     public void deleteMovieById(Long id) {
         movieRepository.delete(getMovieById(id));
     }
-
 
     @Override
     public String toString() {

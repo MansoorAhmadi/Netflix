@@ -18,6 +18,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:8080")
 public class MovieController {
 
+    //ToDo
     //USE DTO CLASSES INSTEAD OF INTERNAL CLASSES
 
     @Autowired
@@ -28,12 +29,8 @@ public class MovieController {
     public ResponseEntity<Movie>
     createMovie(@RequestBody Movie movie) {
         try {
-            Movie newMovie = new Movie();
-            movie.getId();
-            movie.getTitle();
-            movie.getDate();
-            movieRepository.save(newMovie);
-            return new ResponseEntity<>(newMovie, HttpStatus.CREATED);
+            movieRepository.save(movie);
+            return new ResponseEntity<>(movie, HttpStatus.CREATED);
         } catch (Exception e) {
             throw new InternalServerError(e.getMessage());
         }
@@ -50,6 +47,7 @@ public class MovieController {
             Movie _movie = movieData.get();
             _movie.setId(movie.getId());
             _movie.setTitle(movie.getTitle());
+            _movie.setDate(movie.getDate());
             _movie.setDate(movie.getDate());
             return new ResponseEntity<Movie>(movieRepository.save(_movie), HttpStatus.OK);
         } else {
@@ -80,9 +78,8 @@ public class MovieController {
         if (movieData.isPresent()) {
             return new ResponseEntity<>(movieData.get(), HttpStatus.OK);
         } else {
-            throw new MoviesNotFoundException("Invalid Movie!");
+            throw new MoviesNotFoundException("Movie not found !");
         }
-
     }
 
     // Delete a movie
@@ -94,7 +91,7 @@ public class MovieController {
             movieRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            throw new MoviesNotFoundException("Invalid Movie!");
+            throw new MoviesNotFoundException("Movie Not Found !");
         }
     }
 

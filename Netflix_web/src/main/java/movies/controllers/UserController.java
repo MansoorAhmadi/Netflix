@@ -26,12 +26,8 @@ public class UserController {
     public ResponseEntity<User>
     createUser(@RequestBody User user) {
         try {
-            User newUser = new User();
-            user.getFirstName();
-            user.getLastName();
-            user.getEmail();
-            userRepository.save(newUser);
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+            userRepository.save(user);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
         } catch (Exception e) {
             throw new InternalServerError(e.getMessage());
         }

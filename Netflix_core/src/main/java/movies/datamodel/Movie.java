@@ -1,7 +1,6 @@
 package movies.datamodel;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -17,10 +16,19 @@ public class Movie {
     private String title;
 
     @Column(name="DATE")
-    private Date date;
+    private String date;
 
     @OneToMany(mappedBy = "movie",cascade = CascadeType.ALL)
     private Set<SeenMovie> users;
+
+    public Movie(String title, String date, Set<SeenMovie> users) {
+        this.title = title;
+        this.date = date;
+        this.users = users;
+    }
+
+    public Movie() {
+    }
 
     public Long getId() {
         return id;
@@ -38,11 +46,11 @@ public class Movie {
         this.title = title;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

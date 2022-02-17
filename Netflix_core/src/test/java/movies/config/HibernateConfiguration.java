@@ -1,14 +1,17 @@
 package movies.config;
 
+import jdk.jfr.Name;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.util.ResourceUtils;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,16 +19,18 @@ import java.sql.Driver;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages =
-        {
-                "movies.services.impl",
-                "movies.services.api",
-                "movies.repositories",
-                "movies.services"})
-
+@Import(NetflixConfiguration.class)
 public class HibernateConfiguration {
 
-    private final static String DATABASE_DIALECT = "org.hibernate.dialect.H2Dialect";
+    @Inject
+    DataSource dataSource;
+
+    @Bean("global.conf.mainProperties")
+    public Properties getProperties() throws IOException {
+        Properties properties = new Properties();
+        properties.load(new FileInputStream(ResourceUtils.getFile("classpath:./config.properties")));
+        return properties;
+    }
 
     @Bean("dataSource")
     public DataSource getMainDS(){
@@ -43,27 +48,18 @@ public class HibernateConfiguration {
     }
 
     @Bean
-    public Properties getProperties() throws IOException {
-        Properties properties = new Properties();
-        properties.load(new FileInputStream(ResourceUtils.getFile("classpath:./config.properties")));
-        return properties;
-    }
+    @Name("beanFactory")
+    public LocalSessionFactoryBean getSessionFactory(@Autowired DataSource ds) {
+        LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
+        factoryBean.setDataSource(ds);
+        factoryBean.setPackagesToScan("movies.datamodel");
 
-    @Bean
-    public SessionFactory getSessionFactory(DataSource dataSource){
-        LocalSessionFactoryBuilder sessionFactoryBuilder = new LocalSessionFactoryBuilder(dataSource);
-        sessionFactoryBuilder.addProperties(getHibernateProperties());
-        return sessionFactoryBuilder.buildSessionFactory();
-    }
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
+        hibernateProperties.setProperty("hibernate.show_sql", "true");
+        factoryBean.setHibernateProperties(hibernateProperties);
 
-    private Properties getHibernateProperties(){
-        Properties properties = new Properties();
-
-        properties.put("hibernate.dialect", DATABASE_DIALECT);
-        properties.put("hibernate.show_sql", "true");
-        properties.put("hibernate.format_sql", "true");
-
-        return properties;
+        return factoryBean;
     }
 
     @Bean

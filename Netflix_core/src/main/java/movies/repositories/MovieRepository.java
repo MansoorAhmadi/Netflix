@@ -9,6 +9,11 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends CrudRepository<Movie, Long> {
+
+    //JPA & CRUD
+    //CRUD REPOSITORY EXTENDS JPA
+
+    List<Movie> readAllLines();
     Movie saveMovie(Movie movie);
     List<Movie> getAllMovies();
     Movie getMoviesById(Long id);

@@ -36,7 +36,7 @@
     </bean>
 
     <context:component-scan base-package="movies.services.impl" />
-    <context:component-scan base-package="movies.services.api" />
+<!--    <context:component-scan base-package="movies.services.api" />-->
 
 
 </beans>
