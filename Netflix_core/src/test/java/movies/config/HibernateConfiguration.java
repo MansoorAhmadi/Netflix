@@ -28,7 +28,7 @@ public class HibernateConfiguration {
     @Bean("global.conf.mainProperties")
     public Properties getProperties() throws IOException {
         Properties properties = new Properties();
-        properties.load(new FileInputStream(ResourceUtils.getFile("classpath:./config.properties")));
+        properties.load(new FileInputStream(ResourceUtils.getFile("./hibernate.cfg.xml")));
         return properties;
     }
 
@@ -38,8 +38,8 @@ public class HibernateConfiguration {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setDriverClassName(Driver.class.getName());
         driverManagerDataSource.setUrl(resolveProperty(properties,"db.url"));
-        driverManagerDataSource.setPassword("db.username");
-        driverManagerDataSource.setUsername("db.password");
+        driverManagerDataSource.setPassword(resolveProperty(properties,"db.username"));
+        driverManagerDataSource.setUsername(resolveProperty(properties,"db.password"));
         return driverManagerDataSource;
     }
 
@@ -48,8 +48,7 @@ public class HibernateConfiguration {
     }
 
     @Bean
-    @Name("beanFactory")
-    public LocalSessionFactoryBean getSessionFactory(@Autowired DataSource ds) {
+    public LocalSessionFactoryBean getSessionFactory(DataSource ds) {
         LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
         factoryBean.setDataSource(ds);
         factoryBean.setPackagesToScan("movies.datamodel");
@@ -59,11 +58,12 @@ public class HibernateConfiguration {
         hibernateProperties.setProperty("hibernate.show_sql", "true");
         factoryBean.setHibernateProperties(hibernateProperties);
 
+
         return factoryBean;
     }
 
-    @Bean
-    public HibernateTransactionManager getTransactionManager(SessionFactory sessionFactory){
-        return new HibernateTransactionManager(sessionFactory);
-    }
+//    @Bean
+//    public HibernateTransactionManager getTransactionManager(SessionFactory sessionFactory){
+//        return new sessionFactory;
+//    }
 }

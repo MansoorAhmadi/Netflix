@@ -4,11 +4,11 @@ import movies.datamodel.Address;
 import movies.repositories.AddressRepository;
 import movies.services.api.IAddressDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Service
+@Repository
 public class AddressJPADAO extends GenericJPADAO<Address> implements IAddressDAO{
 
     @Autowired

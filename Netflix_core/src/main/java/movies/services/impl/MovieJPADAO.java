@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +45,6 @@ public class MovieJPADAO extends GenericJPADAO<Movie> implements IMovieDOA {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
         scanner.nextLine();
         while (scanner.hasNext()) {
             line = scanner.nextLine();
@@ -63,9 +64,9 @@ public class MovieJPADAO extends GenericJPADAO<Movie> implements IMovieDOA {
 
         public List<Movie> search(Movie movie){
         Session session = factory.openSession();
-        Query<Movie> query = session.createQuery("from title from MOVIE where title =?", Movie.class);
+        Query<Movie> query = session.createQuery("from TITLE from MOVIE where title =?", Movie.class);
 
-        query.setParameter("movieTitle", movie.getTitle());
+        query.setParameter("TITLE", movie.getTitle());
         List<Movie> resultList = query.list();
 
         session.close();
@@ -95,6 +96,8 @@ public class MovieJPADAO extends GenericJPADAO<Movie> implements IMovieDOA {
             throw new MoviesNotFoundException("Movie with Id : " + id + " Not Found");
         }
     }
+
+
 
     public void deleteMovieById(Long id) {
         movieRepository.delete(getMovieById(id));

@@ -1,46 +1,49 @@
 package movies.dataModel;
 
 import movies.config.HibernateConfiguration;
-import movies.config.NetflixConfiguration;
 import movies.datamodel.Movie;
+import movies.repositories.MovieRepository;
 import movies.services.impl.MovieJPADAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import org.junit.Before;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
+
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.util.Assert;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.sql.DataSource;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HibernateConfiguration.class)
-public class DataModelTest {
+public class MovieTest {
 
     //Using LOGGER instead of system
-    private static final Logger logger = LogManager.getLogger(DataModelTest.class);
+    private static final Logger logger = LogManager.getLogger(MovieTest.class);
 
     @Inject
     @Named("dataSource")
     DataSource dataSource;
 
     @Inject
+    SessionFactory factory;
+
+    @Inject
     @Named("movieDAO")
-    private MovieJPADAO movieJPADAO;
+    MovieJPADAO movieJPADAO;
+
+    @Inject
+    private MovieRepository movieRepository;
+
 
 
     @Test
@@ -49,19 +52,16 @@ public class DataModelTest {
         //when
         //then
         assertNotNull(movieJPADAO.readAllLines());
+        logger.info(movieJPADAO.readAllLines());
     }
 
     @Test
     public void getAllMovieTest(){
-
         //given
         List<Movie> moviesList = movieJPADAO.getAllMovies();
 
         //when
-        for(Movie movie:moviesList){
-           logger.info(movie.toString());
-//            System.out.println(movie);
-        }
+        logger.info(moviesList.toString());
 
         //then
         assertNotNull(moviesList);
@@ -69,13 +69,14 @@ public class DataModelTest {
 
     @Test
     public void saveMovieTest(){
-
         //given
-        Movie superman = new Movie();
+        Session session = factory.openSession();
+        Movie movie = new Movie();
+        movie.setTitle("SUPERMAN");
+        movie.setDate("20-Sep-21");
 
         //when
-        movieJPADAO.saveMovie(superman);
-
+        movieJPADAO.saveMovie(movie);
 
         //then
         assertNotNull(movieJPADAO);

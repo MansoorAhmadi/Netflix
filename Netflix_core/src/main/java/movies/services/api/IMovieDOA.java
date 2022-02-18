@@ -10,4 +10,5 @@ public interface IMovieDOA extends IDAO<Movie> {
     List<Movie> getAllMovies();
     Movie getMovieById(Long id);
     void deleteMovieById(Long id);
+    List<Movie> search(Movie movie);
 }

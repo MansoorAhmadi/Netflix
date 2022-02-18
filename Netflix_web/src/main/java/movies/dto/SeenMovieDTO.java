@@ -2,12 +2,9 @@ package movies.dto;
 
 import java.util.Date;
 
-public class MoviesDTO {
+public class SeenMovieDTO {
 
     private Long id;
-
-    private String title;
-
     private Date date;
 
     public Long getId() {
@@ -16,14 +13,6 @@ public class MoviesDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public Date getDate() {
